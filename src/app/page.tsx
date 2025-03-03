@@ -17,6 +17,9 @@ export default function Home() {
       <li>
       <Link href ={"/contrats"}>Contrats</Link>
       </li>
+      <li>
+      <Link href ={"/garants"}>Garants</Link>
+      </li>
     </ul>
       
     </>
