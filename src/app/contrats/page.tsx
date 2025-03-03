@@ -1,14 +1,14 @@
 import API_URL from "@/constants/ApiUrl";
 import HttpService from "@/services/HttpServices";
-import BatimentComponent from "@/components/BatimentComponent";
+import BatimentComponent from "@/components/ContratComponent";
 
 export default async function BatimentPage() {
 
-    const batiments=await HttpService.get(API_URL.batiments);
+    const contrats=await HttpService.get(API_URL.contrats);
     
     return (
       <>
-        <BatimentComponent batiments={batiments}/>
+        <BatimentComponent contrats={contrats}/>
       </>
     );
 }

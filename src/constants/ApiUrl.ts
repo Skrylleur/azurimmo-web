@@ -6,6 +6,7 @@ const API_URL={
     batiments: `${API_BASE}batiments/`,
     appartements: `${API_BASE}appartements/`,
     interventions: `${API_BASE}interventions/`,
+    contrats: `${API_BASE}contrats/`,
 };
 
 export default API_URL;
