@@ -1,14 +1,14 @@
 import API_URL from "@/constants/ApiUrl";
 import HttpService from "@/services/HttpServices";
-import BatimentComponent from "@/components/BatimentComponent";
+import LocataireComponent from "@/components/LocataireComponent";
 
-export default async function BatimentPage() {
+export default async function LocatairePage() {
 
-    const batiments=await HttpService.get(API_URL.batiments);
+    const locataires=await HttpService.get(API_URL.locataires);
     
     return (
       <>
-        <BatimentComponent batiments={batiments}/>
+        <LocataireComponent locataires={locataires}/>
       </>
     );
 }
