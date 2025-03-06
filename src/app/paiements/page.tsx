@@ -6,7 +6,6 @@ export default async function PaiementPage() {
 
     const paiements=await HttpService.get(API_URL.paiements);
     
-    console.log("Paiements :", paiements);
     return (
       <>
         <PaiementComponent paiements={paiements}/>

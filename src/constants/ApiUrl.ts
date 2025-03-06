@@ -9,7 +9,7 @@ const API_URL={
     contrats: `${API_BASE}contrats/`,
     garants: `${API_BASE}garants/`,
     locataires: `${API_BASE}locataires/`,
-    paiements: `${API_BASE}paiements/`,
+    paiements: `${API_BASE}paiements`,
 };
 
 export default API_URL;
