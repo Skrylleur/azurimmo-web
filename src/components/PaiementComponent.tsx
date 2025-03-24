@@ -24,6 +24,26 @@ export default function PaiementComponent({ paiements }: { paiements: Paiement[]
       setEditingId(null);
     };
     
+    const handleDelete = async (id: number) => {
+        const confirm = window.confirm("Voulez-vous vraiment supprimer ce paiement ?");
+        if (!confirm) return;
+      
+        try {
+          const res = await fetch(`http://localhost:9008/api/paiements/${id}`, {
+            method: "DELETE",
+          });
+      
+          if (res.status === 204) {
+            // Supprimer du state local
+            setPaiementList(prev => prev.filter(p => p.id !== id));
+          } else {
+            console.error("Échec de la suppression", res.status);
+          }
+        } catch (err) {
+          console.error("Erreur lors de la suppression", err);
+        }
+      };
+          
     return (
         <>
           <ul>
@@ -36,16 +56,24 @@ export default function PaiementComponent({ paiements }: { paiements: Paiement[]
                     onUpdate={handleUpdate}
                   />
                 ) : (
-                  <>
-                    {new Date(paiement.datePaiement).toLocaleDateString("fr-FR")} - {paiement.montant}€
-                    <button
-                      className="ml-2"
-                      onClick={() => setEditingId(paiement.id)}
-                    >
-                      Modifier
-                    </button>
-                  </>
-                )}
+                <>
+                {new Date(paiement.datePaiement).toLocaleDateString("fr-FR")} - {paiement.montant}€
+
+                <button
+                    className="ml-2"
+                    onClick={() => setEditingId(paiement.id)}
+                >
+                    Modifier
+                </button>
+
+                <button
+                    className="ml-2"
+                    onClick={() => handleDelete(paiement.id)}
+                >
+                    Supprimer
+                </button>
+                </>                
+            )}
               </li>
             ))}
           </ul>
