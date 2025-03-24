@@ -25,7 +25,7 @@ export default function AddPaiementComponent() {
 
     return (
         <div className="p-4">
-          <h2 className="text-xl font-bold mb-4">Gestion des paiements</h2>
+          <h2 className="text-3xl text-blue-600 font-extrabold text-center">Gestion des paiements</h2>
       
           <PaiementForm onPaiementAdded={handlePaiementAjoute} />
       
