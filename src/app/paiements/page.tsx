@@ -1,14 +1,5 @@
-import API_URL from "@/constants/ApiUrl";
-import HttpService from "@/services/HttpServices";
-import PaiementComponent from "@/components/PaiementComponent";
+import AddPaiementComponent from "@/components/AddPaiementComponent";
 
-export default async function PaiementPage() {
-
-    const paiements=await HttpService.get(API_URL.paiements);
-    
-    return (
-      <>
-        <PaiementComponent paiements={paiements}/>
-      </>
-    );
+export default function PaiementPage() {
+  return <AddPaiementComponent />;
 }

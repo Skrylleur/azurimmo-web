@@ -1,17 +1,22 @@
-"use client";
-import { useState } from "react";
+"use client"
 
-export default function PaiementForm() {
+import { JSX, useState } from "react";
+
+type PaiementFormProps = {
+    onPaiementAdded: () => void;
+};
+
+export default function PaiementForm({ onPaiementAdded }: PaiementFormProps): JSX.Element {
     const [montant, setMontant] = useState("");
     const [datePaiement, setDatePaiement] = useState("");
 
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const data = {
             datePaiement,
             montant: parseFloat(montant),
-            contrat: { id: 1 } // Remplace par l'ID correct
+            contrat: { id: 1 }
         };
 
         try {
@@ -25,12 +30,19 @@ export default function PaiementForm() {
                 throw new Error(`Erreur ${response.status}: ${response.statusText}`);
             }
 
-            console.log("Paiement ajouté !");
+            const newPaiement = await response.json();
+            console.log("Nouveau paiement ajouté :", newPaiement);
+
+            onPaiementAdded();
+
+            setMontant("");
+            setDatePaiement("");
         } catch (error) {
             console.error("Erreur lors de l'envoi :", error);
         }
     };
 
+    // ⬇️ Ce return est essentiel !
     return (
         <form onSubmit={handleSubmit}>
             <input 
