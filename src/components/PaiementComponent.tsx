@@ -43,41 +43,56 @@ export default function PaiementComponent({ paiements }: { paiements: Paiement[]
           console.error("Erreur lors de la suppression", err);
         }
       };
-          
+
     return (
         <>
-          <ul>
-            {paiementList.map((paiement) => (
-              <li key={paiement.id}>
-                {editingId === paiement.id ? (
-                  <EditPaiementForm
-                    paiement={paiement}
-                    onCancel={handleCancel}
-                    onUpdate={handleUpdate}
-                  />
-                ) : (
+        <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
+        Retour à l&apos;accueil
+        </Link>
+        
+        <div className="grid gap-4">
+        {paiementList.map((paiement) => (
+            <div
+            key={paiement.id}
+            className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-200 rounded-lg shadow p-4"
+            >
+            {editingId === paiement.id ? (
+                <EditPaiementForm
+                paiement={paiement}
+                onCancel={handleCancel}
+                onUpdate={handleUpdate}
+                />
+            ) : (
                 <>
-                {new Date(paiement.datePaiement).toLocaleDateString("fr-FR")} - {paiement.montant}€
+                <div className="text-gray-800">
+                    <span className="font-medium text-black">
+                    {new Date(paiement.datePaiement).toLocaleDateString("fr-FR")}
+                    </span>{" "}
+                    - {paiement.montant}€
+                </div>
 
-                <button
-                    className="ml-2"
+                <div className="mt-2 sm:mt-0 flex gap-2">
+                    <button
+                    className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded"
                     onClick={() => setEditingId(paiement.id)}
-                >
+                    >
                     Modifier
-                </button>
-
-                <button
-                    className="ml-2"
+                    </button>
+                    <button
                     onClick={() => handleDelete(paiement.id)}
-                >
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                    >
                     Supprimer
-                </button>
-                </>                
-            )}
-              </li>
-            ))}
-          </ul>
-          <Link href="/">Retour à l&apos;accueil</Link>
+                    </button>                
+                    </div>
+                </>
+            )} 
+            {paiementList.length === 0 && (
+                <p className="text-center text-gray-400 italic">Aucun paiement enregistré pour l’instant.</p>
+              )}
+            </div>
+        ))}
+        </div>          
         </>
       );  
 }

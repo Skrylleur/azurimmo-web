@@ -24,13 +24,24 @@ export default function AddPaiementComponent() {
     };
 
     return (
-        <div className="p-4">
-          <h2 className="text-3xl text-blue-600 font-extrabold text-center">Gestion des paiements</h2>
-      
-          <PaiementForm onPaiementAdded={handlePaiementAjoute} />
-      
-          <h2 className="text-xl font-bold mt-6 mb-4">Paiements</h2>
-          <PaiementComponent paiements={paiements} />
+    <div className="min-h-screen bg-[#F9FAFB] text-gray-800 px-4 py-8">
+    <div className="max-w-2xl mx-auto space-y-8">
+
+        <h1 className="text-3xl font-semibold text-center text-gray-900">Gestion des paiements</h1>
+
+        <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
+        <PaiementForm onPaiementAdded={handlePaiementAjoute} />
         </div>
-      );
+
+        <div className="space-y-4">
+        {paiements.length === 0 ? (
+            <p className="text-center text-gray-500">Aucun paiement enregistré.</p>
+        ) : (
+            <PaiementComponent paiements={paiements} />
+        )}
+        </div>
+
+    </div>
+    </div>
+    );
 }

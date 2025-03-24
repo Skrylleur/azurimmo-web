@@ -44,21 +44,29 @@ export default function PaiementForm({ onPaiementAdded }: PaiementFormProps): JS
 
     // ⬇️ Ce return est essentiel !
     return (
-        <form onSubmit={handleSubmit}>
-            <input 
-                type="number" 
-                placeholder="Montant" 
-                value={montant} 
-                onChange={(e) => setMontant(e.target.value)} 
-                required 
-            />
-            <input 
-                type="date" 
-                value={datePaiement} 
-                onChange={(e) => setDatePaiement(e.target.value)} 
-                required 
-            />
-            <button type="submit">Ajouter</button>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 items-center mb-6">
+        <input
+            type="number"
+            placeholder="Montant"
+            value={montant}
+            onChange={(e) => setMontant(e.target.value)}
+            required
+            className="px-4 py-2 border rounded-md w-full sm:w-auto text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <input
+            type="date"
+            value={datePaiement}
+            onChange={(e) => setDatePaiement(e.target.value)}
+            required
+            className="px-4 py-2 border rounded-md w-full sm:w-auto text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button
+        className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition"
+        >
+        Ajouter
+        </button>        
         </form>
     );
 }
