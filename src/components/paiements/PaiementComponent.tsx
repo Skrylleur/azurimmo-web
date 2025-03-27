@@ -1,6 +1,6 @@
 "use client";
 import Paiement from "@/models/Paiement";
-import EditPaiementForm from "@/components/EditPaiementForm";
+import EditPaiementForm from "@/components/paiements/EditPaiementForm";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

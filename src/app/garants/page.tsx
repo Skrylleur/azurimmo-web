@@ -1,6 +1,6 @@
 import API_URL from "@/constants/ApiUrl";
 import HttpService from "@/services/HttpServices";
-import GarantComponent from "@/components/GarantComponent";
+import GarantComponent from "@/components/garants/GarantComponent";
 
 export default async function GarantPage() {
 

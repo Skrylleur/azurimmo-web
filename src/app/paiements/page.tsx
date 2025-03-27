@@ -1,4 +1,4 @@
-import AddPaiementComponent from "@/components/AddPaiementComponent";
+import AddPaiementComponent from "@/components/paiements/AddPaiementComponent";
 
 export default function PaiementPage() {
   return <AddPaiementComponent />;

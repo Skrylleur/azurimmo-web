@@ -1,6 +1,6 @@
 import API_URL from "@/constants/ApiUrl";
 import HttpService from "@/services/HttpServices";
-import InterventionComponent from "@/components/InterventionComponent";
+import InterventionComponent from "@/components/interventions/InterventionComponent";
 
 export default async function InterventionPage() {
 
