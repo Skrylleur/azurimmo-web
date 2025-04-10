@@ -1,22 +1,101 @@
 "use client";
+
 import Appartement from "@/models/Appartement";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import EditAppartementForm from "./EditAppartementForm";
 
-export default function AppartementComponent({ appartements: initialAppartements }: { appartements: Appartement[] }) {
-    const [appartements] = useState<Appartement[]>(initialAppartements);
+export default function AppartementComponent({ appartements }: { appartements: Appartement[] }) {
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [appartementList, setAppartementList] = useState<Appartement[]>(appartements ?? []);
     
+    
+    // Synchronise le state local avec les garants reçus en prop
+    useEffect(() => {
+      if (Array.isArray(appartements)) {
+        setAppartementList(appartements);
+      }
+    }, [appartements]);
+
+    const handleUpdate = (updated: Appartement) => {
+      setAppartementList((prev) =>
+        prev.map((p) => (p.id === updated.id ? updated : p))
+      );
+      setEditingId(null);
+    };
+  
+    const handleCancel = () => {
+      setEditingId(null);
+    };
+    
+    const handleDelete = async (id: number) => {
+        const confirm = window.confirm("Voulez-vous vraiment supprimer cet appartement ?");
+        if (!confirm) return;
+      
+        try {
+          const res = await fetch(`http://localhost:9008/api/appartements/${id}`, {
+            method: "DELETE",
+          });
+      
+          if (res.status === 204) {
+            // Supprimer du state local
+            setAppartementList(prev => prev.filter(p => p.id !== id));
+          } else {
+            console.error("Échec de la suppression", res.status);
+          }
+        } catch (err) {
+          console.error("Erreur lors de la suppression", err);
+        }
+      };
+
     return (
         <>
-            <h2>Appartements</h2>
-            <Link href="/">Retour à l&apos;accueil</Link>
-            <ul>
-                {appartements.map((appartement: Appartement) => (
-                    <li key={appartement.id}>
-                        {appartement.numero} - {appartement.description}
-                    </li>
-                ))}
-            </ul>
+        <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
+        Retour à l&apos;accueil
+        </Link>
+        
+        <div className="grid gap-4">
+        {appartementList.map((appartement) => (
+            <div
+            key={appartement.id}
+            className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-200 rounded-lg shadow p-4"
+            >
+            {editingId === appartement.id ? (
+                <EditAppartementForm
+                appartement={appartement}
+                onCancel={handleCancel}
+                onUpdate={handleUpdate}
+                />
+            ) : (
+                <>
+                <div className="text-gray-800">
+                    <span className="font-medium text-black">
+                    Appartement N°{appartement.numero} : {appartement.description}
+                    </span>
+                </div>
+
+                <div className="mt-2 sm:mt-0 flex gap-2">
+                    <button
+                    className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded"
+                    onClick={() => setEditingId(appartement.id)}
+                    >
+                    Modifier
+                    </button>
+                    <button
+                    onClick={() => handleDelete(appartement.id)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                    >
+                    Supprimer
+                    </button>                
+                    </div>
+                </>
+            )} 
+            {appartementList.length === 0 && (
+                <p className="text-center text-gray-400 italic">Aucun appartement enregistré pour l’instant.</p>
+              )}
+            </div>
+        ))}
+        </div>          
         </>
-    );
+      );  
 }

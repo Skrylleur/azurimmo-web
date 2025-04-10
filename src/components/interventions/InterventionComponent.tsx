@@ -1,22 +1,101 @@
 "use client";
+
 import Intervention from "@/models/Intervention";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import EditInterventionForm from "./EditInterventionForm";
 
-export default function InterventionComponent({ interventions: initialInterventions }: { interventions: Intervention[]}) {
-    const [interventions] = useState<Intervention[]>(initialInterventions);
+export default function InterventionComponent({ interventions }: { interventions: Intervention[] }) {
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [interventionList, setInterventionList] = useState<Intervention[]>(interventions ?? []);
+    
+    
+    // Synchronise le state local avec les garants reçus en prop
+    useEffect(() => {
+      if (Array.isArray(interventions)) {
+        setInterventionList(interventions);
+      }
+    }, [interventions]);
 
-    return(
+    const handleUpdate = (updated: Intervention) => {
+      setInterventionList((prev) =>
+        prev.map((p) => (p.id === updated.id ? updated : p))
+      );
+      setEditingId(null);
+    };
+  
+    const handleCancel = () => {
+      setEditingId(null);
+    };
+    
+    const handleDelete = async (id: number) => {
+        const confirm = window.confirm("Voulez-vous vraiment supprimer cette intervention ?");
+        if (!confirm) return;
+      
+        try {
+          const res = await fetch(`http://localhost:9008/api/interventions/${id}`, {
+            method: "DELETE",
+          });
+      
+          if (res.status === 204) {
+            // Supprimer du state local
+            setInterventionList(prev => prev.filter(p => p.id !== id));
+          } else {
+            console.error("Échec de la suppression", res.status);
+          }
+        } catch (err) {
+          console.error("Erreur lors de la suppression", err);
+        }
+      };
+
+    return (
         <>
-            <h2>Interventions</h2>
-            <Link href="/">Retour à l&apos;accueil</Link>
-            <ul>
-            {interventions.map((intervention: Intervention) => (
-            <li key={intervention.id}>
-                {intervention.typeInter} - {new Date(intervention.dateInter).toLocaleDateString()}
-            </li>
-            ))}
-            </ul>
+        <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
+        Retour à l&apos;accueil
+        </Link>
+        
+        <div className="grid gap-4">
+        {interventionList.map((intervention) => (
+            <div
+            key={intervention.id}
+            className="flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-200 rounded-lg shadow p-4"
+            >
+            {editingId === intervention.id ? (
+                <EditInterventionForm
+                intervention={intervention}
+                onCancel={handleCancel}
+                onUpdate={handleUpdate}
+                />
+            ) : (
+                <>
+                <div className="text-gray-800">
+                    <span className="font-medium text-black">
+                    {intervention.description} le {new Date(intervention.dateInter).toLocaleDateString("fr-FR")}
+                    </span>
+                </div>
+
+                <div className="mt-2 sm:mt-0 flex gap-2">
+                    <button
+                    className="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded"
+                    onClick={() => setEditingId(intervention.id)}
+                    >
+                    Modifier
+                    </button>
+                    <button
+                    onClick={() => handleDelete(intervention.id)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
+                    >
+                    Supprimer
+                    </button>                
+                    </div>
+                </>
+            )} 
+            {interventionList.length === 0 && (
+                <p className="text-center text-gray-400 italic">Aucune intervention enregistré pour l’instant.</p>
+              )}
+            </div>
+        ))}
+        </div>          
         </>
-    );
+      );  
 }

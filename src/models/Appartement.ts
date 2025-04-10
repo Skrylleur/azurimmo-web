@@ -3,6 +3,6 @@ export default interface Appartement {
     id: number;
     numero: number;
     surface: GLfloat;
-    nb_pieces: number;
+    nbPieces: number;
     description: string;
 }
