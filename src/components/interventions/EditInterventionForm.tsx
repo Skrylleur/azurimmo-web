@@ -14,18 +14,17 @@ export default function EditInterventionForm({
   onCancel,
   onUpdate,
 }: EditInterventionFormProps) {
-  const [description, setDescription] = useState(intervention.description.toString());
-  const [typeInter, setTypeInter] = useState(intervention.typeInter.toString());
-  const [dateInter, setDateInter] = useState(
-    new Date(intervention.dateInter).toISOString().split("T")[0]
-  );
+    const [description, setDescription] = useState(intervention.description?.toString() ?? "");
+    const [dateInter, setDateInter] = useState(intervention.dateInter?.toString() ?? "");
+    const [typeInter, setTypeInter] = useState(intervention.typeInter?.toString() ?? "");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const updatedData = {
       description,
-      typeInter,
-      dateInter
+      dateInter: parseFloat(dateInter),
+      typeInter
     };
 
     try {
@@ -40,7 +39,7 @@ export default function EditInterventionForm({
       }
 
       const updated = await response.json();
-      onUpdate(updated); // on met à jour la liste
+      onUpdate(updated);
     } catch (err) {
       console.error(err);
     }
@@ -50,39 +49,49 @@ export default function EditInterventionForm({
     <motion.form
         layout
         onSubmit={handleSubmit}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full"
+        className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-4 mt-4"
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -30 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         >
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
-            <input className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                type="string"
+        <div className="grid gap-4">
+            <input
+                type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
             />
-            <input className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                type="string"
-                value={typeInter}
-                onChange={(e) => setTypeInter(e.target.value)}
-                required
-            />
-            <input className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+            <input
                 type="date"
                 value={dateInter}
                 onChange={(e) => setDateInter(e.target.value)}
                 required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+              type="text" 
+              value={typeInter}
+              onChange={(e) => setTypeInter(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
             />
       </div>
-      <div className="flex gap-2">
-        <button type="submit"
-        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm">
-            Valider</button>
-        <button type="button" 
-        onClick={onCancel}
-        className="text-gray-500 hover:text-gray-700 px-3 py-1 text-sm">Annuler</button>
+      <div className="flex justify-end gap-2 pt-4">
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Valider
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-gray-500 hover:text-gray-700 text-sm"
+        >
+          Annuler
+        </button>
       </div>
     </motion.form>
   );

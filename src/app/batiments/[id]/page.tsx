@@ -5,12 +5,23 @@ import { useParams } from "next/navigation";
 import Batiment from "@/models/Batiment";
 import Appartement from "@/models/Appartement";
 import EditBatimentForm from "@/components/batiments/EditBatimentForm";
+import AddAppartementForm from "@/components/appartements/AddAppartementForm";
+import { useRouter } from "next/navigation";
 
 export default function BatimentDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const [batiment, setBatiment] = useState<Batiment | null>(null);
   const [appartements, setAppartements] = useState<Appartement[]>([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const fetchAppartements = async () => {
+    if (!batiment) return;
+    const res = await fetch(`http://localhost:9008/api/appartements/batiment/${batiment.id}`);
+    const data = await res.json();
+    setAppartements(data);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,10 +61,9 @@ export default function BatimentDetailPage() {
           <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-2">
             <p><span className="font-semibold">Adresse :</span> {batiment.adresse}</p>
             <p><span className="font-semibold">Ville :</span> {batiment.ville}</p>
-
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition"
+              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
             >
               Modifier ce bâtiment
             </button>
@@ -68,26 +78,63 @@ export default function BatimentDetailPage() {
           </div>
         )}
 
+        <button
+        onClick={() => router.back()}
+        className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+        Retour
+        </button>
+
+        {/* 🔽 Liste des appartements */}
         <div>
-          <h2 className="text-xl font-semibold mt-8 mb-4">Appartements rattachés</h2>
+          <div className="flex justify-between items-center mt-8 mb-4">
+            <h2 className="text-xl font-semibold">Appartements rattachés</h2>
+            {!showForm && (
+                <button
+                onClick={() => setShowForm(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm"
+                >
+                Ajouter un appartement
+                </button>
+            )}
+          </div>
+
+          {/* 🔽 Formulaire affiché dynamiquement */}
+          {showForm && (
+            <div className="bg-white p-4 mt-6 rounded-xl shadow-sm ring-1 ring-gray-200">
+              <AddAppartementForm
+                batimentId={batiment.id}
+                onAppartAdded={() => {
+                  fetchAppartements();
+                  setShowForm(false);
+                }}
+                onCancel={() => setShowForm(false)}
+              />
+            </div>
+          )}
+
           {appartements.length === 0 ? (
             <p className="text-gray-500">Aucun appartement trouvé pour ce bâtiment.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             {appartements.map((appart) => (
-                <div key={appart.id} className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
+              <div
+                key={appart.id}
+                onClick={() => router.push(`/appartements/${appart.id}`)}
+                className="cursor-pointer bg-white rounded-xl shadow-md p-4 border border-gray-200 hover:bg-gray-100 transition"
+              >
                 <div className="text-lg font-semibold text-gray-900 mb-2">
-                    Appartement n°{appart.numero}
+                  Appartement n°{appart.numero}
                 </div>
                 <div className="text-sm text-gray-600 space-y-1">
-                    <p><span className="font-medium">Surface :</span> {appart.surface} m²</p>
-                    <p><span className="font-medium">Pièces :</span> {appart.nbPieces}</p>
-                    <p><span className="font-medium">Description :</span> {appart.description}</p>
+                  <p><span className="font-medium">Surface :</span> {appart.surface} m²</p>
+                  <p><span className="font-medium">Pièces :</span> {appart.nbPieces}</p>
+                  <p><span className="font-medium">Description :</span> {appart.description}</p>
                 </div>
-                </div>
+              </div>
             ))}
-            </div>
-          )}
+          </div>          
+        )}
         </div>
       </div>
     </div>

@@ -1,105 +1,121 @@
-"use client"
+"use client";
 
-import { JSX, useState } from "react";
+import { useEffect, useState } from "react";
+import Locataire from "@/models/Locataire";
+import Contrat from "@/models/Contrat";
 
 type LocataireFormProps = {
-    onLocataireAdded: () => void;
+  onLocataireAdded: () => void;
 };
 
-export default function LocataireForm({ onLocataireAdded }: LocataireFormProps): JSX.Element {
-    const [nom, setNom] = useState("");
-    const [prenom, setPrenom] = useState("");
-    const [dateN, setDateN] = useState("");
-    const [lieuN, setLieuN] = useState("");
+export default function LocataireForm({ onLocataireAdded }: LocataireFormProps) {
+  const [dateN, setDateN] = useState("");
+  const [lieuN, setLieuN] = useState("");
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [contratId, setContratId] = useState("");
+  const [contrats, setContrats] = useState<Contrat[]>([]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  useEffect(() => {
+    const fetchContrats = async () => {
+      try {
+        const res = await fetch("http://localhost:9008/api/contrats");
+        const data = await res.json();
+        setContrats(data);
+      } catch (err) {
+        console.error("Erreur lors du chargement des contrats :", err);
+      }
+    };
+    fetchContrats();
+  }, []);
 
-        const data = {
-            nom,
-            prenom,
-            dateN,
-            lieuN,
-            locataire: { id: 1 }
-        };
+  // Soumission du formulaire
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        try {
-            const response = await fetch("http://localhost:9008/api/locataires", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-            }
-
-            const newLocataire = await response.json();
-            console.log("Nouveau locataire ajouté :", newLocataire);
-
-            onLocataireAdded();
-
-            setNom("");
-            setPrenom("");
-            setDateN("");
-            setLieuN("");
-            
-        } catch (error) {
-            console.error("Erreur lors de l'envoi :", error);
-        }
+    const newLocataire: Partial<Locataire> = {
+      dateN: new Date(dateN),
+      lieuN,
+      nom,
+      prenom,
+      contrat: { id: Number(contratId) },
     };
 
-    return (
-<form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Nom :</label>
-    <input
-      type="string"
-      value={nom}
-      onChange={(e) => setNom(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
-    </div>
-    
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Prénom :</label>
-    <input
-      type="string"
-      value={prenom}
-      onChange={(e) => setPrenom(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
-  </div>
+    try {
+      const res = await fetch("http://localhost:9008/api/locataires", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newLocataire),
+      });
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Date de naissance :</label>
-    <input
-      type="date"
-      value={dateN}
-      onChange={(e) => setDateN(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm appearance-none"
-    />
-  </div>
+      if (!res.ok) throw new Error("Erreur lors de l'ajout");
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Lieu de naissance :</label>
-    <input
-      type="string"
-      value={lieuN}
-      onChange={(e) => setLieuN(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm appearance-none"
-    />
-  </div>
+      onLocataireAdded();
 
-  <div className="sm:col-span-2 flex justify-end">
-    <button
-      type="submit"
-      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-600 transition" 
-      
-    >
-      Ajouter
-    </button>
-  </div>
-</form>
-    );
+      // Réinitialisation des champs
+      setLieuN("");
+      setDateN("");
+      setNom("");
+      setPrenom("");
+      setContratId("");
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du locataire :", err);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input
+        type="date"
+        placeholder="Date de naissance"
+        value={dateN}
+        onChange={(e) => setDateN(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Lieu de naissance"
+        value={lieuN}
+        onChange={(e) => setLieuN(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Nom"
+        value={nom}
+        onChange={(e) => setNom(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Prénom"
+        value={prenom}
+        onChange={(e) => setPrenom(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <select
+        value={contratId}
+        onChange={(e) => setContratId(e.target.value)}
+        required
+        className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+      >
+        <option value="">-- Choisir un contrat --</option>
+        {contrats.map((c) => (
+          <option key={c.id} value={c.id}>
+            Contrat du {new Date(c.dateEntree).toLocaleDateString("fr-FR")} au {new Date(c.dateSortie).toLocaleDateString("fr-FR")}
+          </option>
+        ))}
+      </select>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Ajouter du locataire
+      </button>
+    </form>
+  );
 }

@@ -14,17 +14,15 @@ export default function EditPaiementForm({
   onCancel,
   onUpdate,
 }: EditPaiementFormProps) {
-  const [montant, setMontant] = useState(paiement.montant.toString());
-  const [datePaiement, setDatePaiement] = useState(
-    new Date(paiement.datePaiement).toISOString().split("T")[0]
-  );
+    const [datePaiement, setDatePaiement] = useState(paiement.datePaiement?.toString() ?? "");
+    const [montant, setMontant] = useState(paiement.montant?.toString() ?? "");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const updatedData = {
+      datePaiement: new Date(datePaiement),
       montant: parseFloat(montant),
-      datePaiement,
     };
 
     try {
@@ -39,7 +37,7 @@ export default function EditPaiementForm({
       }
 
       const updated = await response.json();
-      onUpdate(updated); // on met à jour la liste
+      onUpdate(updated);
     } catch (err) {
       console.error(err);
     }
@@ -49,33 +47,42 @@ export default function EditPaiementForm({
     <motion.form
         layout
         onSubmit={handleSubmit}
-        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full"
+        className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-4 mt-4"
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -30 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         >
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
-            <input className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
-                type="number"
-                value={montant}
-                onChange={(e) => setMontant(e.target.value)}
-                required
-            />
-            <input className="border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        <div className="grid gap-4">
+            <input
                 type="date"
                 value={datePaiement}
                 onChange={(e) => setDatePaiement(e.target.value)}
                 required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
+            />
+            <input
+                type="number"
+                value={montant}
+                onChange={(e) => setMontant(e.target.value)}
+                required
+                className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
             />
       </div>
-      <div className="flex gap-2">
-        <button type="submit"
-        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md text-sm">
-            Valider</button>
-        <button type="button" 
-        onClick={onCancel}
-        className="text-gray-500 hover:text-gray-700 px-3 py-1 text-sm">Annuler</button>
+      <div className="flex justify-end gap-2 pt-4">
+        <button
+          type="submit"
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm"
+        >
+          Valider
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-gray-500 hover:text-gray-700 text-sm"
+        >
+          Annuler
+        </button>
       </div>
     </motion.form>
   );

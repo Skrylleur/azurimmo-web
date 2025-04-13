@@ -1,106 +1,121 @@
-"use client"
-
-import { JSX, useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import Appartement from "@/models/Appartement";
+import Batiment from "@/models/Batiment";
 
 type AppartementFormProps = {
-    onAppartementAdded: () => void;
+  onAppartementAdded: () => void;
 };
 
-export default function AppartementForm({ onAppartementAdded }: AppartementFormProps): JSX.Element {
-    const [numero, setNumero] = useState("");
-    const [surface, setSurface] = useState("");
-    const [nbPieces, setNbPieces] = useState("");
-    const [description, setDescription] = useState("");
+export default function AppartementForm({ onAppartementAdded }: AppartementFormProps) {
+  const [numero, setNumero] = useState("");
+  const [surface, setSurface] = useState("");
+  const [nbPieces, setNbPieces] = useState("");
+  const [description, setDescription] = useState("");
+  const [batimentId, setBatimentId] = useState("");
+  const [batiments, setBatiments] = useState<Batiment[]>([]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  useEffect(() => {
+    const fetchBatiments = async () => {
+      try {
+        const res = await fetch("http://localhost:9008/api/batiments");
+        const data = await res.json();
+        setBatiments(data);
+      } catch (err) {
+        console.error("Erreur lors du chargement des bâtiments :", err);
+      }
+    };
+    fetchBatiments();
+  }, []);
 
-        const data = {
-            numero,
-            surface,
-            nbPieces,
-            description,
-            appartement: { id: 1 }
-        };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        try {
-            const response = await fetch("http://localhost:9008/api/appartements", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Erreur ${response.status}: ${response.statusText}`);
-            }
-
-            const newAppartement = await response.json();
-            console.log("Nouvel appartement ajouté :", newAppartement);
-
-            onAppartementAdded();
-
-            setNumero("");
-            setSurface("");
-            setNbPieces("");
-            setDescription("");
-            
-        } catch (error) {
-            console.error("Erreur lors de l'envoi :", error);
-        }
+    const newAppartement: Partial<Appartement> = {
+      numero: parseInt(numero),
+      surface: parseFloat(surface),
+      nbPieces: parseInt(nbPieces),
+      description,
+      batiment: { id: Number(batimentId) }, // 👈 lien avec le bâtiment
     };
 
-    return (
-<form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Numéro d&apos;appartement :</label>
-    <input
-      type="number"
-      value={numero}
-      onChange={(e) => setNumero(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
+    try {
+      const res = await fetch("http://localhost:9008/api/appartements", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newAppartement),
+      });
 
-  </div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Surface :</label>
-    <input 
-      type="number"
-      value={surface}
-      onChange={(e) => setSurface(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
-  <div>
+      if (!res.ok) throw new Error("Erreur lors de l'ajout");
 
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Nombre de pièces :</label>
-    <input
-      type="string"
-      value={nbPieces}
-      onChange={(e) => setNbPieces(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
-    </div>
+      onAppartementAdded();
 
-    <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">Description :</label>
-    <input
-      type="text"
-      value={description}
-      onChange={(e) => setDescription(e.target.value)}
-      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
-    />
-    </div>
+      // Réinitialiser les champs
+      setNumero("");
+      setSurface("");
+      setNbPieces("");
+      setDescription("");
+      setBatimentId("");
+    } catch (err) {
+      console.error("Erreur lors de l'ajout de l'appartement :", err);
+    }
+  };
 
-  </div>
-  <div className="sm:col-span-2 flex justify-end">
-    <button
-      type="submit"
-      className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md hover:bg-green-600 transition" 
-      
-    >
-      Ajouter
-    </button>
-  </div>
-</form>
-    );
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <input
+        type="number"
+        placeholder="Numéro"
+        value={numero}
+        onChange={(e) => setNumero(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="number"
+        placeholder="Surface"
+        value={surface}
+        onChange={(e) => setSurface(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="number"
+        placeholder="Nombre de pièces"
+        value={nbPieces}
+        onChange={(e) => setNbPieces(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="w-full border rounded px-3 py-2 text-sm"
+        required
+      />
+      <select
+        value={batimentId}
+        onChange={(e) => setBatimentId(e.target.value)}
+        required
+        className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+      >
+        <option value="">-- Choisir un bâtiment --</option>
+        {batiments.map((b) => (
+          <option key={b.id} value={b.id}>
+            {b.adresse} - {b.ville}
+          </option>
+        ))}
+      </select>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+      >
+        Ajouter l&apos;appartement
+      </button>
+    </form>
+  );
 }

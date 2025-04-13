@@ -1,6 +1,8 @@
-export default interface Paiement {
-    map(arg0: (paiement: Paiement) => import("react").JSX.Element): import("react").ReactNode;
-    id: number;
-    montant: number;
-    datePaiement: Date;
+import Contrat from "./Contrat";
+
+export default interface Intervention {
+  id?: number;
+  datePaiement: Date;
+  montant: number;
+  contrat?: Partial<Contrat>;
 }

@@ -1,8 +1,10 @@
+import Batiment from "./Batiment";
+
 export default interface Appartement {
-    map(arg0: (appartement: Appartement) => import("react").JSX.Element): import("react").ReactNode;
-    id: number;
-    numero: number;
-    surface: GLfloat;
-    nbPieces: number;
-    description: string;
+  id?: number;
+  numero: number;
+  surface: number;
+  nbPieces: number;
+  description: string;
+  batiment?: Partial<Batiment>;
 }
