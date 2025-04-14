@@ -23,7 +23,7 @@ export default function AddLocataireForm({
     e.preventDefault();
 
     const newLocataire: Partial<Locataire> = {
-      dateN: new Date(dateN),
+      dateN: new Date(dateN).toISOString().split("T")[0],
       lieuN,
       nom,
       prenom,

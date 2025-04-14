@@ -6,5 +6,5 @@ export default interface Locataire {
   prenom: string;
   dateN: string;
   lieuN: string;
-  contrat?: Contrat;
+  contrat?: { id: number } | Contrat;
 }
