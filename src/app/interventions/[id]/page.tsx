@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Intervention from "@/models/Intervention";
 import EditInterventionForm from "@/components/interventions/EditInterventionForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function InterventionDetailPage() {
   const params = useParams();
@@ -46,12 +47,21 @@ export default function InterventionDetailPage() {
             <p><strong>Description :</strong> {intervention.description}</p>
             <p><strong>Type :</strong> {intervention.typeInter}</p>
             <p><strong>Date :</strong> {new Date(intervention.dateInter).toLocaleDateString()}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier cette intervention
             </button>
+
+            <DeleteButton
+              entity="interventions"
+              id={intervention.id}
+              redirectTo="/interventions"
+              label="Supprimer cette intervention"
+            />
+            </div>
           </div>
         ) : (
           <EditInterventionForm

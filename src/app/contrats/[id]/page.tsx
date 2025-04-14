@@ -96,7 +96,7 @@ export default function ContratDetailPage() {
               redirectTo="/contrats"
               label="Supprimer ce contrat"
             />
-          </div>
+            </div>
           </div>
         ) : (
           <EditContratForm

@@ -1,10 +1,10 @@
 import Contrat from "./Contrat";
 
-export default interface Appartement {
-  id?: number;
-  dateN: Date;
-  lieuN: string;
+export default interface Locataire {
+  id: number;
   nom: string;
   prenom: string;
-  contrat?: Partial<Contrat>;
+  dateN: string;
+  lieuN: string;
+  contrat?: Contrat;
 }

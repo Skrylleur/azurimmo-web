@@ -7,6 +7,7 @@ import Appartement from "@/models/Appartement";
 import EditBatimentForm from "@/components/batiments/EditBatimentForm";
 import AddAppartementForm from "@/components/appartements/AddAppartementForm";
 import { useRouter } from "next/navigation";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function BatimentDetailPage() {
   const params = useParams();
@@ -61,12 +62,21 @@ export default function BatimentDetailPage() {
           <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-2">
             <p><span className="font-semibold">Adresse :</span> {batiment.adresse}</p>
             <p><span className="font-semibold">Ville :</span> {batiment.ville}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier ce bâtiment
             </button>
+
+            <DeleteButton
+              entity="batiments"
+              id={batiment.id}
+              redirectTo="/batiments"
+              label="Supprimer ce bâtiment"
+            />
+            </div>
           </div>
         ) : (
           <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">

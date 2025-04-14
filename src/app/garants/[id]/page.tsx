@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Garant from "@/models/Garant";
 import EditGarantForm from "@/components/garants/EditGarantForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function GarantDetailPage() {
   const params = useParams();
@@ -45,12 +46,21 @@ export default function GarantDetailPage() {
           <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-2">
             <p><strong>Nom :</strong> {garant.nom}</p>
             <p><strong>Prénom :</strong> {garant.prenom}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier ce garant
             </button>
+
+            <DeleteButton
+              entity="garant"
+              id={garant.id}
+              redirectTo="/garants"
+              label="Supprimer ce garant"
+            />
+            </div>
           </div>
         ) : (
           <EditGarantForm

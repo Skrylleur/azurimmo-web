@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Locataire from "@/models/Locataire";
 import EditLocataireForm from "@/components/locataires/EditLocataireForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function LocataireDetailPage() {
   const params = useParams();
@@ -47,12 +48,21 @@ export default function LocataireDetailPage() {
             <p><strong>Prénom :</strong> {locataire.prenom}</p>
             <p><strong>Date de naissance :</strong> {new Date(locataire.dateN).toLocaleDateString()}</p>
             <p><strong>Lieu de naissance :</strong> {locataire.lieuN}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier ce locataire
             </button>
+
+            <DeleteButton
+              entity="locataires"
+              id={locataire.id}
+              redirectTo="/locataires"
+              label="Supprimer ce locataire"
+            />
+            </div>
           </div>
         ) : (
           <EditLocataireForm

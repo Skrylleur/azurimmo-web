@@ -9,6 +9,7 @@ import EditAppartementForm from "@/components/appartements/EditAppartementForm";
 import AddInterventionForm from "@/components/interventions/AddInterventionForm";
 import Link from "next/link";
 import AddContratForm from "@/components/contrats/AddContratForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function AppartementDetailPage() {
   const params = useParams();
@@ -70,12 +71,21 @@ export default function AppartementDetailPage() {
             <p><strong>Surface :</strong> {appartement.surface}</p>
             <p><strong>Pièces :</strong> {appartement.nbPieces}</p>
             <p><strong>Description :</strong> {appartement.description}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier cet appartement
             </button>
+
+            <DeleteButton
+              entity="appartements"
+              id={appartement.id}
+              redirectTo="/appartements"
+              label="Supprimer cet appartement"
+            />
+            </div>
           </div>
         ) : (
           <EditAppartementForm

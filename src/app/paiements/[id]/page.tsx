@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Paiement from "@/models/Paiement";
 import EditPaiementForm from "@/components/paiements/EditPaiementForm";
+import DeleteButton from "@/components/DeleteButton";
 
 export default function PaiementDetailPage() {
   const params = useParams();
@@ -45,12 +46,21 @@ export default function PaiementDetailPage() {
           <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200 space-y-2">
             <p><strong>Date du paiement :</strong> {new Date(paiement.datePaiement).toLocaleDateString("fr-FR")}</p>
             <p><strong>Montant :</strong> {paiement.montant}</p>
+            <div className="flex flex-wrap gap-4 pt-4">
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
             >
               Modifier ce paiement
             </button>
+
+            <DeleteButton
+              entity="paiements"
+              id={paiement.id}
+              redirectTo="/paiements"
+              label="Supprimer ce paiement"
+            />
+            </div>
           </div>
         ) : (
           <EditPaiementForm
