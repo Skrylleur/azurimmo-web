@@ -1,7 +1,6 @@
 "use client";
 
 import Appartement from "@/models/Appartement";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import EditAppartementForm from "./EditAppartementForm";
 import { useRouter } from "next/navigation";
@@ -30,10 +29,6 @@ export default function AppartementList({ appartements }: { appartements: Appart
 
   return (
     <>
-      <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
-        Retour à l&apos;accueil
-      </Link>
-
       <div className="grid gap-4 mt-6">
         {appartementList.length === 0 ? (
           <p className="text-center text-gray-400 italic">Aucun appartement enregistré pour l’instant.</p>

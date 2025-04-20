@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Appartement from "@/models/Appartement";
 import AppartementComponent from "./AppartementList";
 import AppartementForm from "@/components/appartements/AppartementForm";
+import Link from "next/link";
 
 export default function AddAppartementComponent() {
   const [appartements, setAppartements] = useState<Appartement[]>([]);
@@ -32,6 +33,15 @@ export default function AddAppartementComponent() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
           <AppartementForm onAppartementAdded={handleAppartementAjoute} />
+        </div>
+
+        <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+          Retour à l&apos;accueil
+        </Link>      
         </div>
 
         <div className="space-y-4">

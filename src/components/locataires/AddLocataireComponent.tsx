@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Locataire from "@/models/Locataire";
 import LocataireForm from "./LocataireForm";
 import LocataireList from "./LocataireList";
+import Link from "next/link";
 
 export default function AddLocataireComponent() {
 
@@ -33,6 +34,15 @@ export default function AddLocataireComponent() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
           <LocataireForm onLocataireAdded={handleLocataireAjoute} />
+        </div>
+
+        <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+          Retour à l&apos;accueil
+        </Link>      
         </div>
 
         <div className="space-y-4">

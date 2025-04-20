@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Paiement from "@/models/Paiement";
 import PaiementForm from "./InterventionForm";
 import PaiementList from "./PaiementList";
+import Link from "next/link";
 
 export default function AddPaiementComponent() {
 
@@ -33,6 +34,15 @@ export default function AddPaiementComponent() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
           <PaiementForm onPaiementAdded={handlePaiementAjoute} />
+        </div>
+
+        <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+          Retour à l&apos;accueil
+        </Link>      
         </div>
 
         <div className="space-y-4">

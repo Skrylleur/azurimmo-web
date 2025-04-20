@@ -1,7 +1,6 @@
 "use client";
 
 import Locataire from "@/models/Locataire";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import EditLocataireForm from "./EditLocataireForm";
 import { useRouter } from "next/navigation";
@@ -30,10 +29,6 @@ export default function LocataireList({ locataires }: { locataires: Locataire[] 
 
   return (
     <>
-      <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
-        Retour à l&apos;accueil
-      </Link>
-
       <div className="grid gap-4 mt-6">
         {locataireList.length === 0 ? (
           <p className="text-center text-gray-400 italic">Aucun locataire enregistré pour l’instant.</p>

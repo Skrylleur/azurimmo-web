@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Garant from "@/models/Garant";
 import GarantComponent from "@/components/garants/GarantList";
 import GarantForm from "@/components/garants/GarantForm";
+import Link from "next/link";
 
 export default function AddGarantComponent() {
 
@@ -33,6 +34,15 @@ export default function AddGarantComponent() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
           <GarantForm onGarantAdded={handleGarantAjoute} />
+        </div>
+
+        <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+          Retour à l&apos;accueil
+        </Link>      
         </div>
 
         <div className="space-y-4">

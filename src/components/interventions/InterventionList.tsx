@@ -1,7 +1,6 @@
 "use client";
 
 import Intervention from "@/models/Intervention";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import EditInterventionForm from "./EditInterventionForm";
 import { useRouter } from "next/navigation";
@@ -30,10 +29,6 @@ export default function InterventionList({ interventions }: { interventions: Int
 
   return (
     <>
-      <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
-        Retour à l&apos;accueil
-      </Link>
-
       <div className="grid gap-4 mt-6">
         {interventionList.length === 0 ? (
           <p className="text-center text-gray-400 italic">Aucune intervention enregistrée pour l’instant.</p>

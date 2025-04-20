@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Intervention from "@/models/Intervention";
 import InterventionComponent from "./InterventionList";
 import InterventionForm from "@/components/interventions/InterventionForm";
+import Link from "next/link";
 
 export default function AddInterventionComponent() {
 
@@ -33,6 +34,15 @@ export default function AddInterventionComponent() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm ring-1 ring-gray-200">
           <InterventionForm onInterventionAdded={handleInterventionAjoute} />
+        </div>
+
+        <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm transition"
+        >
+          Retour à l&apos;accueil
+        </Link>      
         </div>
 
         <div className="space-y-4">

@@ -1,7 +1,6 @@
 "use client";
 
 import Contrat from "@/models/Contrat";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import EditContratForm from "./EditContratForm";
@@ -30,10 +29,6 @@ export default function ContratList({ contrats }: { contrats: Contrat[] }) {
 
   return (
     <>
-      <Link href="/" className="inline-block text-sm text-gray-500 hover:text-gray-700 underline transition">
-        Retour à l&apos;accueil
-      </Link>
-
       <div className="grid gap-4 mt-6">
         {contratList.length === 0 ? (
           <p className="text-center text-gray-400 italic">Aucun contrat enregistré pour l’instant.</p>
