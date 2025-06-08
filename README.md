@@ -40,23 +40,28 @@
 
 ## 📂 Structure du projet
 
-azurimmo-next/
-│
-├── app/                     # Pages & routing Next.js (App Router)
-│   ├── admin/               # Dashboard de gestion
-│   │   ├── batiments/
-│   │   ├── appartements/
-│   │   ├── contrats/
-│   │   ├── paiements/
-│   │   ├── locataires/
-│   │   ├── garants/
-│   │   └── interventions/
-│
-├── components/              # Composants réutilisables (formulaires, cards…)
-├── lib/                     # Utils & intégration Prisma côté serveur
-├── public/                  # Assets statiques
-├── styles/                  # Styles globaux
-└── …
+| Dossier/Fichier                | Description |
+|-------------------------------|-------------|
+| `app/`                        | Dossier racine des routes Next.js (App Router) |
+| ├── `admin/`                  | Zone d'administration avec toutes les entités |
+| ├── `admin/batiments/`        | Pages liées aux bâtiments |
+| ├── `admin/batiments/[id]/`   | Détail et modification d’un bâtiment |
+| ├── `admin/appartements/`     | Pages liées aux appartements |
+| ├── `admin/appartements/[id]/`| Détail et modification d’un appartement |
+| ├── `admin/contrats/`         | Pages liées aux contrats |
+| ├── `admin/contrats/[id]/`    | Détail et modification d’un contrat |
+| ├── `admin/paiements/`        | Pages liées aux paiements |
+| ├── `admin/locataires/`       | Pages liées aux locataires |
+| ├── `admin/garants/`          | Pages liées aux garants |
+| └── `admin/interventions/`    | Pages liées aux interventions |
+| `components/`                 | Composants réutilisables (UI, formulaires, boutons...) |
+| `lib/`                        | Fonctions utilitaires (ex : Prisma Client) |
+| `public/`                     | Fichiers statiques (favicon, images...) |
+| `styles/`                     | Styles globaux (globals.css) |
+| `.env`                        | Variables d’environnement |
+| `tailwind.config.ts`          | Configuration Tailwind CSS |
+| `tsconfig.json`               | Configuration TypeScript |
+| `README.md`                   | Documentation du projet |
 
 ---
 
